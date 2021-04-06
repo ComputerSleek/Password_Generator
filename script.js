@@ -1,97 +1,93 @@
-// Assignment Code
-var generateBtn = document.querySelector("#generate");
+//Generate Password
+var password = "";
 
-// Write password to the #password input
-function writePassword() {
-// WHEN I click the button to generate a password
-// THEN I am presented with a series of prompts for password criteria
-  var password = generatePassword();
-  var passwordText = document.querySelector("#password");
+var passwordGeneration = function() {
+  password = "";
 
-// WHEN the password is generated
-// THEN the password is either displayed in an alert or written to the page
-passwordText.value = password;
+  //Create a function that will ask user for length of password. Note: Must be between 8 and 128 Chara long
+  var lengthPassword = passwordLength();
 
+  //Create a function that will determine all inclusions for Character Sets
+  var passwordInclusions = charaInclusions();
+  var passwordInclusionsLength = passwordInclusions.length;
+
+  for (var i = 0; i < lengthPassword; i++) {
+    password += passwordInclusions.charAt(Math.floor(Math.random() * passwordInclusionsLength));
+  }
+console.log (password.charCodeAt(0))
+  return password;
+};
+
+//This is the function that will prompt for **password length**
+var passwordLength = function() {
+  //First, lets ask the user for the length of the password using a prompt
+  var lengthPass = prompt("Enter Desired Length of New Password. Must Be Between 8 and 128 Characters Long.");
+
+  //Next, lets validate the user input(Whether user entered invalid length or entered nothing at all)
+  if (lengthPass < 8 || lengthPass > 128 || lengthPass === "") {
+    alert("Invalid Length Entry. Length Must Be Between 8 and 128 Characters Long.")
+    return passwordLength;
+  }
+
+  //This turns string into number. Note:refer to documentation if im still confused later.
+  lengthPass = Math.floor(Number(lengthPass));
+
+  //This will send data from this function to layout function!
+  return lengthPass;
 }
 
+//Function That will determine included Character sets
+var charaInclusions = function() {
+  //String to send back inclusions at end
+  var passwordInclusions = "";
 
-// GIVEN I need a new, secure password
-// need a button or link to get a new password
-// need to show the password on the page
+  //Character Sets
+  var lowerCase = "abcdefghijklmnopqrstuvwxyz";
+  var upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  var numbers = "0123456789";
+  var specialChara = "~`!@#$%^&*+<?/;:(=)|{";
+   ;
+
+  //Ask to include characters(Confirms or Prompts?)
+  var confirmLower = confirm("Include Lower Case Characters?");
+  var confirmUpper = confirm("Include Upper Case Characters?");
+  var confirmNumber = confirm("Include Numbers?");
+  var confirmSpecial = confirm("Include Special Characters?");
+   
+
+  //Validate Selections
+  if (confirmLower === true) {
+    passwordInclusions += lowerCase;
+  }
+  if (confirmUpper === true) {
+    passwordInclusions += upperCase;
+  }
+  if (confirmNumber === true) {
+    passwordInclusions += numbers;
+  }
+  if (confirmSpecial === true) {
+    passwordInclusions += specialChara;
+  }
+  
+
+  //Send back results
+  console.log (passwordInclusions)
+   return passwordInclusions;
+    
+}
+
+// Assignment Code Ending
+var generateBtn = document.querySelector("#generate");
+console.log (generateBtn)
+// Write password to the #password input
+function writePassword(event) {
+    event.preventDefault();
+  var password = passwordGeneration();
+  var passwordText = document.querySelector("#password");
+
+  passwordText.value = password;
+
+}
 
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
-
-// ***************function here******************
-// write a function called generatePassword which will have a series of prompts for user input
-
-// WHEN prompted for password criteria
-// THEN I select which criteria to include in the password
-function generatePassword(){
-  var upperCase = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
-  var lowerCase = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
-  var specialChar = ["!", "@", "#", "$", "%", "&", "*", "+", "-", "=", ":", ";", "<", ">", ",", ".", "/", "_", "~"];
-  var num = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
-  var passwordLength = false;
-}
-
-// WHEN prompted for the length of the password
-// THEN I choose a length of at least 8 characters and no more than 128 characters
-// We have to ask the user for how many characters they want in a password
-// We have to check to make sure it is between 8 and 128
-// Otherwise, we tell the use to fix their input.
-while(passwordLength < 8 || passwordLength > 128 || passwordLength == ""){
-  var passwordLength = prompt("Create a password with a length between 8 and 128")
-}
-
-// WHEN prompted for character types to include in the password
-// THEN I choose lowercase, uppercase, numeric, and/or special characters
-// confirm if they want lowercase
-var pickLowerCase = confirm("Would you like lowercase in your password?")
-// confirm if they want uppercase
-var pickUpperCase = confirm("Would you like uppercase in your password?")
-// confirm if they want numeric
-var pickNum = confirm("Would you like numbers in your password?")
-// confirm if they want special characters
-var pickSpecialChar = confirm("Would you like special characters in your password?")
-
-// WHEN I answer each prompt
-// THEN my input should be validated and at least one character type should be selected
-// we need to show an error if they gave us no characters to choose from
-if(pickUpperCase === fasle && pickLowerCase === false && pick SpecialChar === false && pickNum === false){
-  alert("Invalid Password")
-}
-
-// WHEN all prompts are answered
-// THEN a password is generated that matches the selected criteria
-// from all the characters chosen, choose one randomly and add it to our password X a number of times 
-var validPass = []
-
-if (pickUpperCase === true){
-  vaildPass = valid.concat(upperCase)
-}
-
-if (pickLowerCase === true){
-  vaildPass = valid.concat(lowerCase)
-}
-
-if (pickSpecialChar === true){
-  vaildPass = valid.concat(specialChar)
-}
-
-if (pickNum === true){
-  vaildPass = valid.concat(num)
-}
-
-console.log(validPass)
-
-var randomPassword = "";
-
-for (var i = 0; i < passwordLength; i++){
-  randomPassword += validPass[Math.floor(Math.random() * validPass.length)];
-}
-return randomPassword;
-// ***************function ends here******************
-
-
-}
